@@ -1,0 +1,24 @@
+{
+  "phase": "0",
+  "environment": {
+    "cloud_shell": true
+  },
+  "python": {
+    "version": "3.12.3",
+    "ok": true
+  },
+  "gcloud": {
+    "account": "rayan.bouakli@eurecom.fr",
+    "project": "project-4f78b94c-e143-4e46-9f6",
+    "error": null
+  },
+  "docker": {
+    "version": "Docker version 29.8.2, build 7fc2dff",
+    "present": true
+  },
+  "git": {
+    "remote": "https://github.com/RayanBKL/clouds.git",
+    "is_github": true,
+    "slug": "RayanBKL/clouds"
+  }
+}

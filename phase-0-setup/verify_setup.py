@@ -21,6 +21,7 @@ so you can test them without touching the cloud — see ``tests/test_units.py``.
 from __future__ import annotations
 
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -51,7 +52,17 @@ def parse_gcloud_config(raw: str) -> dict:
     # TODO: parse `raw` as JSON and return {"account": ..., "project": ...}
     #       from the "core" section. Return empty strings if raw is empty or a
     #       field is missing.
-    raise NotImplementedError("Phase 0: implement parse_gcloud_config()")
+    if not raw or not raw.strip():
+        return {"account": "", "project": ""}
+    try:
+        data = json.loads(raw)
+    except json.JSONDecodeError:
+        return {"account": "", "project": ""}
+    core = data.get("core", {}) if isinstance(data, dict) else {}
+    return {
+        "account": core.get("account", "") or "",
+        "project": core.get("project", "") or "",
+    }
 
 
 def parse_repo_slug(remote_url: str) -> str:
@@ -69,7 +80,17 @@ def parse_repo_slug(remote_url: str) -> str:
     """
     # TODO: return "owner/repo" for both the HTTPS and SSH forms shown above.
     #       Strip any trailing ".git". Return "" if not a github.com URL.
-    raise NotImplementedError("Phase 0: implement parse_repo_slug()")
+    if not remote_url:
+        return ""
+    url = remote_url.strip()
+    match = re.match(
+        r"^(?:https?://(?:[^@/]+@)?github\.com/|git@github\.com:|ssh://git@github\.com/)"
+        r"([^/\s]+)/([^/\s]+?)(?:\.git)?/?$",
+        url,
+    )
+    if not match:
+        return ""
+    return f"{match.group(1)}/{match.group(2)}"
 
 
 # --------------------------------------------------------------------------- #
